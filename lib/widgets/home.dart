@@ -24,7 +24,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _newsViewModel = Provider.of<NewsViewModel>(context, listen: false);
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () { //Bir sonraki olay döngüsü yinelemesine 
+                   //  kadar yürütmeyi geciktirmek için Dart'ın olay kuyruğunun davranışını kullanıyor
       _data();
     });
     return Scaffold(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/model/news_model.dart';
+import 'package:news_app/viewmodel/favorite_tr.dart';
 import 'package:news_app/viewmodel/viewmodel.dart';
+import 'package:news_app/widgets/fav_add_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +17,7 @@ class TurkeyNews extends StatefulWidget {
 
 class _TurkeyNewsState extends State<TurkeyNews> {
   late NewsViewModel _newsViewModel;
+  late FavTrViewModel _favTrViewModel;
   @override
   void initState() {
     // TODO: implement initState
@@ -24,6 +27,7 @@ class _TurkeyNewsState extends State<TurkeyNews> {
   @override
   Widget build(BuildContext context) {
     _newsViewModel = Provider.of<NewsViewModel>(context);
+    _favTrViewModel = Provider.of<FavTrViewModel>(context);
     return _newsViewModel.state == NewsCheck.NewsLoadedState
         ? gelenList(context)
         : _newsViewModel.state == NewsCheck.NewsLoadingState
@@ -37,29 +41,54 @@ class _TurkeyNewsState extends State<TurkeyNews> {
 
   Widget gelenList(BuildContext context) {
     var trNews = _newsViewModel.trArticles;
+    _favTrViewModel.add(trNews);
     return ListView.builder(
       itemCount: trNews.length,
       itemBuilder: (context, index) {
         var gelenNews = trNews[index];
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () => _lanuchUrl(gelenNews.url),
-            child: Material(
-                elevation: 4,
-                borderRadius: BorderRadius.circular(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    newsImageBlog(context, gelenNews),
-                    newsTitleMetod(gelenNews),
-                    newsContentMetod(gelenNews),
-                    SizedBox(
-                      height: 5,
-                    )
-                  ],
+        return Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () => _lanuchUrl(gelenNews.url),
+                child: Material(
+                    elevation: 4,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        newsImageBlog(context, gelenNews),
+                        newsTitleMetod(gelenNews),
+                        newsContentMetod(gelenNews),
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    )),
+              ),
+            ),
+
+            // Favori ekleme butonu
+
+            Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: UserFavAdd(
+                    isFav: _favTrViewModel.getisFav(
+                        index), // Kaydededilen veriyi buraya veri tabanından çekiceğiz
+                    favClick: () {
+                      debugPrint("Tıklandı: " + index.toString());
+                      bool a = !_favTrViewModel.getisFav(index);
+                      _favTrViewModel.update(index, a);
+                      // Veri tabanına kaydedip bunu  ve gelen verileri ona göre işlem yapıcağız.
+
+                      // Firebase favoriler kısmına eklenecek veri buraya yazılacak.
+                    },
+                  ),
                 )),
-          ),
+          ],
         );
       },
     );
@@ -130,10 +159,8 @@ class _TurkeyNewsState extends State<TurkeyNews> {
   }
 
   _lanuchUrl(String? url) async {
-    
-    try{
-        await launch(url!,forceWebView: true);
-    } catch(e){} 
-            
+    try {
+      await launch(url!, forceWebView: true);
+    } catch (e) {}
   }
 }

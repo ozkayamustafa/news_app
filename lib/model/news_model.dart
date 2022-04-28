@@ -36,7 +36,6 @@ class Articles {
   String? urlToImage;
   String? publishedAt;
   String? content;
-
   Articles(
       {this.source,
       this.author,
@@ -74,6 +73,10 @@ class Articles {
     return data;
   }
 }
+
+// PUsh notification bak, bundle haber adı- ve içerik başlığı olacak
+// Fireabse kullanıcı girişi e favorileri ekleme yapacagız
+// arama kısmı eklenecek
 
 class Source {
   String? id;
