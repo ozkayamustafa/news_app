@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/viewmodel/viewmodel.dart';
+import 'package:news_app/widgets/search_delegate.dart';
 import 'package:news_app/widgets/turkey_news.dart';
 import 'package:news_app/widgets/us_news.dart';
 import 'package:provider/provider.dart';
@@ -24,12 +25,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _newsViewModel = Provider.of<NewsViewModel>(context, listen: false);
-    Future.delayed(Duration.zero, () { //Bir sonraki olay döngüsü yinelemesine 
-                   //  kadar yürütmeyi geciktirmek için Dart'ın olay kuyruğunun davranışını kullanıyor
+    Future.delayed(Duration.zero, () {
+      //Bir sonraki olay döngüsü yinelemesine
+      //  kadar yürütmeyi geciktirmek için Dart'ın olay kuyruğunun davranışını kullanıyor
       _data();
     });
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Container(
+            child: IconButton(
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(
+                          searchTr: _newsViewModel.trArticles));
+                },
+                icon: Icon(Icons.search)),
+          )
+        ],
         title: Center(
           child: Text("News"),
         ),
