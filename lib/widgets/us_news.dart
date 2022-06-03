@@ -72,7 +72,7 @@ class _UsNewsState extends State<UsNews> {
 
             // Favori ekleme butonu
 
-            Align(
+          /*  Align(
                 alignment: Alignment.topRight,
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
@@ -88,7 +88,7 @@ class _UsNewsState extends State<UsNews> {
                     },
                   ),
                 )
-              ),
+              ),*/
           ],
         );
       },

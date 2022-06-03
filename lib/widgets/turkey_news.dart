@@ -69,9 +69,9 @@ class _TurkeyNewsState extends State<TurkeyNews> {
               ),
             ),
 
+            /*
             // Favori ekleme butonu
-
-            Align(
+              Align(
                 alignment: Alignment.topRight,
                 child: Container(
                   margin: EdgeInsets.only(right: 10),
@@ -88,6 +88,8 @@ class _TurkeyNewsState extends State<TurkeyNews> {
                     },
                   ),
                 )),
+
+*/
           ],
         );
       },
@@ -127,6 +129,9 @@ class _TurkeyNewsState extends State<TurkeyNews> {
           child: Image.network(
             gelenNews.urlToImage.toString(),
             fit: BoxFit.cover,
+            errorBuilder: (context,object,stactree){
+              return Center(child: Text("Resim indirilemedi"),);
+            },
           ),
         ),
         Positioned(
